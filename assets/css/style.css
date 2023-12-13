@@ -1,0 +1,92 @@
+/* color scheme sourced from http://khroma.co/generator/ */
+:root {
+    --background: #e3e9ee;
+    --purple: #74047a;
+    --black: black;
+    --white: white;
+}
+
+html {
+    /* set 1rem to 10px instead of native 16px to make it easier to calculate font-size values for the rest of the page (e.g. 1.6rem is 16px, 2.0rem is 20px, etc.) */
+    font-size: 62.5%;
+}
+
+body {
+    /* Sans Serif font stack is implemented to help select the best font for each type of computer operating system */
+    font-family:Arial, Helvetica, sans-serif;
+  
+    /* set body font size to 1.75rem, which is 1.75x more than the font-size of 10px, making it 17.5px*/
+    color: var(--gin);
+    background-color: var(--background);
+}
+
+/*BEGIN MENU HEADER*/
+.header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 4rem;
+    color: var(--black);
+    text-align: center;
+    padding: 15px;
+}
+
+h3 {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.container {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    /* background-color: rgb(93, 138, 171);
+    height: 300px; */
+}
+
+.button {
+    font-size: 2.5rem;
+    margin: 5px;
+    background-color: var(--purple);
+    text-align: center;
+    padding: 0 5px;
+    color: var(--white);
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.answer {
+    text-align: left;
+    margin-left: 20px;
+}
+
+.label {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.input {
+    height: 70%;
+    width: 300px;
+    font-size: 20px;
+}
+
+.secondary-div {
+    padding-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+}
