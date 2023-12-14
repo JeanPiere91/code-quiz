@@ -6,20 +6,20 @@ var questions = [
         "title" : "Commonly used data types DO NOT include:",
         "options": [
             {
-                "Option": "strings",
-                "Value": false,
+                "option": "strings",
+                "value": false,
             },
             {
-                "Option": "booleans",
-                "Value": false,
+                "option": "booleans",
+                "value": false,
             },
             {
-                "Option": "alerts",
-                "Value": true,
+                "option": "alerts",
+                "value": true,
             },
             {
-                "Option": "numbers",
-                "Value": false,
+                "option": "numbers",
+                "value": false,
             }
         ]
     },
@@ -27,20 +27,20 @@ var questions = [
         "title" : "The condition in a if / else statement is enclosed within ___.",
         "options": [
             {
-                "Option": "quobes",
-                "Value": false,
+                "option": "quobes",
+                "value": false,
             },
             {
-                "Option": "curly brackets",
-                "Value": false,
+                "option": "curly brackets",
+                "value": false,
             },
             {
-                "Option": "parentheses",
-                "Value": true,
+                "option": "parentheses",
+                "value": false,
             },
             {
-                "Option": "square brackets",
-                "Value": true,
+                "option": "square brackets",
+                "value": true,
             }
         ]
     },
@@ -48,20 +48,20 @@ var questions = [
         "title" : "Arrays in JavaScript can be use to store ____.",
         "options": [
             {
-                "Option": "numbers and strings",
-                "Value": false,
+                "option": "numbers and strings",
+                "value": false,
             },
             {
-                "Option": "other arrays",
-                "Value": false,
+                "option": "other arrays",
+                "value": false,
             },
             {
-                "Option": "booleans",
-                "Value": false,
+                "option": "booleans",
+                "value": false,
             },
             {
-                "Option": "all of the above",
-                "Value": true,
+                "option": "all of the above",
+                "value": true,
             }
         ]
     },
@@ -69,20 +69,20 @@ var questions = [
         "title" : "String values must be enclosed within ___ when being assigned to variables.",
         "options": [
             {
-                "Option": "commas",
-                "Value": false,
+                "option": "commas",
+                "value": false,
             },
             {
-                "Option": "curly brackets",
-                "Value": false,
+                "option": "curly brackets",
+                "value": false,
             },
             {
-                "Option": "quobes",
-                "Value": true,
+                "option": "quotes",
+                "value": true,
             },
             {
-                "Option": "parentheses",
-                "Value": true,
+                "option": "parentheses",
+                "value": false,
             }
         ]
     },
@@ -90,20 +90,20 @@ var questions = [
         "title" : "A very useful tool used during development and debugging for printing content to the debugger is:",
         "options": [
             {
-                "Option": "JavaScript",
-                "Value": false,
+                "option": "JavaScript",
+                "value": false,
             },
             {
-                "Option": "terminal/bash",
-                "Value": false,
+                "option": "terminal/bash",
+                "value": false,
             },
             {
-                "Option": "for loops",
-                "Value": false,
+                "option": "for loops",
+                "value": false,
             },
             {
-                "Option": "console log",
-                "Value": true,
+                "option": "console log",
+                "value": true,
             }
         ]
     }
@@ -112,12 +112,14 @@ var questions = [
 var timerCount;
 var timer;
 var scores;
-
+var timeDiscount = 10;
+var timeScore;
 // The init function is called when the page loads
 function init() {
     firstView();
 }
 
+// th
 function firstView() {
     timerCount = 70;
     var h1El = document.createElement("h1");
@@ -131,32 +133,60 @@ function firstView() {
     btEl.textContent = "Start Quiz";
     btEl.classList.add('button');
     btEl.addEventListener("click", function(){
-        clearContainer();
         startTimer();
-        secondView();
+        questionsView(0);
     });
     containerElement.appendChild(h1El);
     containerElement.appendChild(h3El);
     containerElement.appendChild(btEl);
 }
 
-function secondView() {
+// This function is used to show all the questions with its options
+function questionsView(index) {
+    
+    clearContainer();
     containerElement.setAttribute("style", "align-items: flex-start;");
     var h1El = document.createElement("h1");
-    h1El.textContent = questions[0].title;
+    h1El.textContent = questions[index].title;
     h1El.classList.add('h1');
     h1El.setAttribute("style", "text-align: left;");
     containerElement.appendChild(h1El);
 
-    for (var i = 0; i < questions[0].options.length; i++) {
+    for (var i = 0; i < questions[index].options.length; i++) {
         var btEl = document.createElement("button");
-        btEl.textContent = (i + 1 ).toString() + ". " + questions[0].options[i].Option;
+        btEl.textContent = (i + 1 ).toString() + ". " + questions[index].options[i].option;
+        btEl.value = questions[index].options[i].value;
         btEl.classList.add('button');
         btEl.classList.add('answer');
         containerElement.appendChild(btEl);
-        btEl.addEventListener("click", function(){
-            clearContainer();
-            lastView();
+        btEl.addEventListener("click", function(event){
+            //check if the answer is correct
+            var value = event.target.value;
+            if(value !== "true"){
+                var timeRemain = timerCount - timeDiscount;
+                if(timeRemain < 0){
+                    timerCount = 0;
+                    setTime(timerCount);
+                }
+                else{
+                    timerCount = timeRemain;
+                    setTime(timerCount);
+                }
+            }
+
+            //check if the answer is correct
+            if(index == questions.length - 1) {
+                clearContainer();
+                timeScore = timerCount;
+                lastView();
+                clearInterval(timer);
+            }
+            else
+                questionsView(index + 1);
+
+            var brEl = document.createElement("br");
+            // var h1El1 = document.createElement("h1");
+            containerElement.appendChild(brEl);
         })
     }
 }
@@ -171,8 +201,8 @@ function lastView() {
 
     h1El.textContent = "All done !";
     h1El.classList.add('h1');
-
-    h3El.textContent = "Your final score is" ;
+    
+    h3El.textContent = "Your final score is " + timeScore;
     h3El.classList.add('h3');
     h3El.setAttribute("style", "margin-left: 10px;");
 
@@ -235,7 +265,7 @@ function startTimer() {
     // Sets timer
     timer = setInterval(function() {
       timerCount--;
-      timerElement.textContent = "Time : " + timerCount;
+      setTime(timerCount);
     //   if (timerCount >= 0) {
     //     // Tests if win condition is met
     //     if (isWin && timerCount > 0) {
@@ -249,9 +279,14 @@ function startTimer() {
         // Clears interval
         clearInterval(timer);
         clearContainer();
+        timeScore = timerCount;
         lastView();
       }
     }, 1000);
+  }
+
+  function setTime(time) {
+    timerElement.textContent = "Time : " + time;
   }
 
 // The clearContainer function is used to remove all the children whthin Div container
