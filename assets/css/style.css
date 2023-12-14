@@ -4,6 +4,7 @@
     --purple: #74047a;
     --black: black;
     --white: white;
+    --purple-light: #eae1ea;
 }
 
 html {
@@ -89,4 +90,21 @@ h3 {
     justify-content: flex-start;
     flex-wrap: wrap;
     width: 100%;
+}
+
+.li {
+    list-style: none;
+    font-size: 2rem;
+    background-color: var(--purple-light);
+    margin: 3px 5px;
+    padding: 2px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.scores {
+    cursor: pointer;
+    border-radius: 4px;
+    border: 3px solid;
+    border-color: var(--purple);
 }

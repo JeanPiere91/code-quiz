@@ -1,5 +1,11 @@
 var containerElement = document.querySelector(".container");
 var timerElement = document.querySelector(".timer-count");
+var h3Element = document.querySelector(".scores");
+h3Element.addEventListener("click", function(){
+    clearContainer();
+    highScoresView();
+});
+
 // Array of questions the user will answer
 var questions = [
     {
@@ -23,90 +29,90 @@ var questions = [
             }
         ]
     },
-    // {
-    //     "title" : "The condition in a if / else statement is enclosed within ___.",
-    //     "options": [
-    //         {
-    //             "option": "quobes",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "curly brackets",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "parentheses",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "square brackets",
-    //             "value": true,
-    //         }
-    //     ]
-    // },
-    // {
-    //     "title" : "Arrays in JavaScript can be use to store ____.",
-    //     "options": [
-    //         {
-    //             "option": "numbers and strings",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "other arrays",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "booleans",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "all of the above",
-    //             "value": true,
-    //         }
-    //     ]
-    // },
-    // {
-    //     "title" : "String values must be enclosed within ___ when being assigned to variables.",
-    //     "options": [
-    //         {
-    //             "option": "commas",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "curly brackets",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "quotes",
-    //             "value": true,
-    //         },
-    //         {
-    //             "option": "parentheses",
-    //             "value": false,
-    //         }
-    //     ]
-    // },
-    // {
-    //     "title" : "A very useful tool used during development and debugging for printing content to the debugger is:",
-    //     "options": [
-    //         {
-    //             "option": "JavaScript",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "terminal/bash",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "for loops",
-    //             "value": false,
-    //         },
-    //         {
-    //             "option": "console log",
-    //             "value": true,
-    //         }
-    //     ]
-    // }
+    {
+        "title" : "The condition in a if / else statement is enclosed within ___.",
+        "options": [
+            {
+                "option": "quobes",
+                "value": false,
+            },
+            {
+                "option": "curly brackets",
+                "value": false,
+            },
+            {
+                "option": "parentheses",
+                "value": false,
+            },
+            {
+                "option": "square brackets",
+                "value": true,
+            }
+        ]
+    },
+    {
+        "title" : "Arrays in JavaScript can be use to store ____.",
+        "options": [
+            {
+                "option": "numbers and strings",
+                "value": false,
+            },
+            {
+                "option": "other arrays",
+                "value": false,
+            },
+            {
+                "option": "booleans",
+                "value": false,
+            },
+            {
+                "option": "all of the above",
+                "value": true,
+            }
+        ]
+    },
+    {
+        "title" : "String values must be enclosed within ___ when being assigned to variables.",
+        "options": [
+            {
+                "option": "commas",
+                "value": false,
+            },
+            {
+                "option": "curly brackets",
+                "value": false,
+            },
+            {
+                "option": "quotes",
+                "value": true,
+            },
+            {
+                "option": "parentheses",
+                "value": false,
+            }
+        ]
+    },
+    {
+        "title" : "A very useful tool used during development and debugging for printing content to the debugger is:",
+        "options": [
+            {
+                "option": "JavaScript",
+                "value": false,
+            },
+            {
+                "option": "terminal/bash",
+                "value": false,
+            },
+            {
+                "option": "for loops",
+                "value": false,
+            },
+            {
+                "option": "console log",
+                "value": true,
+            }
+        ]
+    }
 ];
 
 var timerCount;
@@ -129,9 +135,10 @@ function init() {
     firstView();
 }
 
-// th
+// this function showed when you start 
 function firstView() {
     timerCount = 70;
+    setTime(0);
     var h1El = document.createElement("h1");
     var h3El = document.createElement("h3");
     var btEl = document.createElement("button");
@@ -228,11 +235,10 @@ function lastView() {
         
         var score = {
             "name" : inEl.value,
-            "score" : timeScore
+            "time" : timeScore
         }
 
         scores.push(score);
-
         localStorage.setItem("scores", JSON.stringify(scores));
 
         // if(event.target.textContent)
@@ -260,7 +266,6 @@ function highScoresView() {
 
     h1El.textContent = "Highscores";
     h1El.classList.add('h1');
-
     btEl1.textContent = "Go Back";
     btEl1.classList.add('button');
     btEl1.addEventListener("click", function(){
@@ -271,13 +276,18 @@ function highScoresView() {
     btEl2.textContent = "Clear Highscores";
     btEl2.classList.add('button');
     btEl2.addEventListener("click", function(){
+        
+        localStorage.clear();
+        scores = [];
         clearContainer();
+        highScoresView();
     })
     
     divEl.appendChild(btEl1);
     divEl.appendChild(btEl2);
 
     containerElement.appendChild(h1El);
+    renderScores();
     containerElement.appendChild(divEl);
 }
 
@@ -313,24 +323,16 @@ function clearContainer() {
 
 
 // The following function renders items in a todo list as <li> elements
-function renderTodos() {
-    // Clear todoList element and update todoCountSpan
-    todoList.innerHTML = "";
-    todoCountSpan.textContent = todos.length;
-  
+function renderScores() {  
     // Render a new li for each todo
-    for (var i = 0; i < todos.length; i++) {
-      var todo = todos[i];
+    for (var i = 0; i < scores.length; i++) {
+      var score = scores[i];
   
-      var li = document.createElement("li");
-      li.textContent = todo;
-      li.setAttribute("data-index", i);
-  
-      var button = document.createElement("button");
-      button.textContent = "Complete ✔️";
-  
-      li.appendChild(button);
-      todoList.appendChild(li);
+      var liEl = document.createElement("li");
+      liEl.classList.add('li');
+      liEl.textContent = (i+1).toString() + ". " + (score.name).toUpperCase() + " - " + score.time;
+    
+      containerElement.appendChild(liEl);
     }
   }
 
