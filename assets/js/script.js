@@ -23,99 +23,109 @@ var questions = [
             }
         ]
     },
-    {
-        "title" : "The condition in a if / else statement is enclosed within ___.",
-        "options": [
-            {
-                "option": "quobes",
-                "value": false,
-            },
-            {
-                "option": "curly brackets",
-                "value": false,
-            },
-            {
-                "option": "parentheses",
-                "value": false,
-            },
-            {
-                "option": "square brackets",
-                "value": true,
-            }
-        ]
-    },
-    {
-        "title" : "Arrays in JavaScript can be use to store ____.",
-        "options": [
-            {
-                "option": "numbers and strings",
-                "value": false,
-            },
-            {
-                "option": "other arrays",
-                "value": false,
-            },
-            {
-                "option": "booleans",
-                "value": false,
-            },
-            {
-                "option": "all of the above",
-                "value": true,
-            }
-        ]
-    },
-    {
-        "title" : "String values must be enclosed within ___ when being assigned to variables.",
-        "options": [
-            {
-                "option": "commas",
-                "value": false,
-            },
-            {
-                "option": "curly brackets",
-                "value": false,
-            },
-            {
-                "option": "quotes",
-                "value": true,
-            },
-            {
-                "option": "parentheses",
-                "value": false,
-            }
-        ]
-    },
-    {
-        "title" : "A very useful tool used during development and debugging for printing content to the debugger is:",
-        "options": [
-            {
-                "option": "JavaScript",
-                "value": false,
-            },
-            {
-                "option": "terminal/bash",
-                "value": false,
-            },
-            {
-                "option": "for loops",
-                "value": false,
-            },
-            {
-                "option": "console log",
-                "value": true,
-            }
-        ]
-    }
+    // {
+    //     "title" : "The condition in a if / else statement is enclosed within ___.",
+    //     "options": [
+    //         {
+    //             "option": "quobes",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "curly brackets",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "parentheses",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "square brackets",
+    //             "value": true,
+    //         }
+    //     ]
+    // },
+    // {
+    //     "title" : "Arrays in JavaScript can be use to store ____.",
+    //     "options": [
+    //         {
+    //             "option": "numbers and strings",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "other arrays",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "booleans",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "all of the above",
+    //             "value": true,
+    //         }
+    //     ]
+    // },
+    // {
+    //     "title" : "String values must be enclosed within ___ when being assigned to variables.",
+    //     "options": [
+    //         {
+    //             "option": "commas",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "curly brackets",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "quotes",
+    //             "value": true,
+    //         },
+    //         {
+    //             "option": "parentheses",
+    //             "value": false,
+    //         }
+    //     ]
+    // },
+    // {
+    //     "title" : "A very useful tool used during development and debugging for printing content to the debugger is:",
+    //     "options": [
+    //         {
+    //             "option": "JavaScript",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "terminal/bash",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "for loops",
+    //             "value": false,
+    //         },
+    //         {
+    //             "option": "console log",
+    //             "value": true,
+    //         }
+    //     ]
+    // }
 ];
 
 var timerCount;
 var timer;
-var scores;
+var scores = [];
 var timeDiscount = 10;
 var timeScore;
+
 // The init function is called when the page loads
 function init() {
+  
+    // Get stored scores from localStorage
+    var storedScores = JSON.parse(localStorage.getItem("scores"));
+
+    // If scores were retrieved from localStorage, update the todos array to it
+    if (storedScores !== null) {
+        scores = storedScores;
+    }
+
     firstView();
 }
 
@@ -214,7 +224,18 @@ function lastView() {
 
     btEl.textContent = "Submit";
     btEl.classList.add('button');
-    btEl.addEventListener("click", function(){
+    btEl.addEventListener("click", function(event){
+        
+        var score = {
+            "name" : inEl.value,
+            "score" : timeScore
+        }
+
+        scores.push(score);
+
+        localStorage.setItem("scores", JSON.stringify(scores));
+
+        // if(event.target.textContent)
         clearContainer();
         highScoresView();
     })
@@ -266,15 +287,7 @@ function startTimer() {
     timer = setInterval(function() {
       timerCount--;
       setTime(timerCount);
-    //   if (timerCount >= 0) {
-    //     // Tests if win condition is met
-    //     if (isWin && timerCount > 0) {
-    //       // Clears interval and stops timer
-    //       clearInterval(timer);
-    //       winGame();
-    //     }
-    //   }
-    //   // Tests if time has run out
+    
       if (timerCount === 0) {
         // Clears interval
         clearInterval(timer);
@@ -297,6 +310,29 @@ function clearContainer() {
     while(containerElements.hasChildNodes())
     containerElements.removeChild(containerElements.firstChild);
 }
+
+
+// The following function renders items in a todo list as <li> elements
+function renderTodos() {
+    // Clear todoList element and update todoCountSpan
+    todoList.innerHTML = "";
+    todoCountSpan.textContent = todos.length;
+  
+    // Render a new li for each todo
+    for (var i = 0; i < todos.length; i++) {
+      var todo = todos[i];
+  
+      var li = document.createElement("li");
+      li.textContent = todo;
+      li.setAttribute("data-index", i);
+  
+      var button = document.createElement("button");
+      button.textContent = "Complete ✔️";
+  
+      li.appendChild(button);
+      todoList.appendChild(li);
+    }
+  }
 
 // These functions are used by init
 function getScores() {
